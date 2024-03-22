@@ -1,0 +1,23 @@
+{% extends 'base2.html' %} {% block content %} {%load static%}
+<section class="container" style="margin-top: 10%; margin-bottom: 5%">
+  <div class="row">
+    {% for i in data %}
+    <div class="col-4 p-5">
+      <div class="card text-center border shadow" style="width: 18rem" data-aos="flip-up">
+        <img
+          src="{{i.image1.url}}"
+          class="card-img-top"
+          alt="{{i.crop_head}}"
+          style="width: auto; height: 200px"
+        />
+        <div class="card-body">
+          <a href="{% url 'crop_detail2' name=i.crop_head %}" class="a1"
+            ><h5 class="card-title c1">{{i.crop_head}}</h5></a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

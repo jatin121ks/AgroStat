@@ -1,0 +1,39 @@
+{% extends 'sidebar.html' %} {% block content %} {%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disease Detection</title>
+  </head>
+  <body>
+    <section class="container" style="padding-right: 30%">
+      <form method="POST" action="" class="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1 class="mt-5 display-3">Crop Disease Detection</h1>
+        <br />
+        <div class="form-floating mb-3">
+          <input
+            type="file"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Upload Image"
+            name="file1"
+          />
+          <label for="floatingInput">Upload your Image</label>
+        </div>
+
+        <br />
+        <div class="d-grid gap-2 col-6">
+          <button
+            type="submit"
+            class="btn btn-outline-warning text-dark-emphasis btn-lg"
+          >
+            Check for Disease
+          </button>
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
+{% endblock %}

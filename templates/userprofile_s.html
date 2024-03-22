@@ -1,0 +1,88 @@
+{% extends 'sidebar.html' %} {% block content %} {%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <a
+      class="weatherwidget-io"
+      href="https://forecast7.com/en/31d6374d87/amritsar/"
+      data-label_1="AMRITSAR"
+      data-label_2="WEATHER"
+      data-theme="original"
+      style="margin-top: 20px; width: 90%"
+      >AMRITSAR WEATHER</a
+    >
+    <section class="container" style="padding-right: 30%">
+      <form method="POST" action="" class="">
+        {% csrf_token %}
+
+        <h1 class="mt-5 display-3">User Profile</h1>
+        <div class="row align-items-center mt-3">
+          <div class="col-2 mb-3">
+            <label for="inputPassword6" class="col-form-label fs-4 c1"
+              >Name</label
+            >
+          </div>
+          <div class="col-7 mb-3">
+            <input
+              class="form-control"
+              type="text"
+              value="{{user.name}}"
+              aria-label="Disabled input example"
+              disabled
+              readonly
+            />
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-2 mb-3">
+            <label for="inputPassword6" class="col-form-label fs-4 c1"
+              >E-mail</label
+            >
+          </div>
+          <div class="col-7 mb-3">
+            <input
+              class="form-control"
+              type="text"
+              value="{{user.email}}"
+              aria-label="Disabled input example"
+              disabled
+              readonly
+            />
+          </div>
+        </div>
+        <div class="d-grid gap-2 col-6">
+          <button
+            type="submit"
+            class="btn btn-outline-warning text-dark-emphasis btn-lg"
+          >
+            Change Password
+          </button>
+        </div>
+      </form>
+    </section>
+
+    {% if msg == 1 %}
+    <script type="text/javascript">
+      alert("success");
+    </script>
+    {% endif %}
+    <script>
+      !(function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (!d.getElementById(id)) {
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://weatherwidget.io/js/widget.min.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }
+      })(document, "script", "weatherwidget-io-js");
+    </script>
+  </body>
+</html>
+{% endblock %}
