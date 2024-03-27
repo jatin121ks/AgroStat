@@ -18,6 +18,15 @@ from myapp.models import disease_solution
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
+import warnings
+import itertools
+import matplotlib.pyplot as plt
+warnings.filterwarnings("ignore")
+plt.style.use('fivethirtyeight')
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib
+import plotly.graph_objects as go
 
 
 
@@ -164,6 +173,348 @@ def handle_uploaded_file(f,name):
           destination.write(chunk)
      destination.close()
 
+def predict_crop_rice(request):
+     if request.method=='POST':
+          df=pd.read_csv("rice-production.csv",parse_dates=['Year'])
+          df.dtypes
+          country=request.POST.get('country')
+          
+          print(country)
+          #country='India'
+          production=df[df['Entity']==country]
+          production=production.loc[:,['Year','Production']]
+          production=production.sort_values('Year')
+          production.isnull().sum()
+          production=production.set_index('Year')
+          production.index
+          y=production
+          p = d = q = range(0, 2)
+          pdq = list(itertools.product(p, d, q))
+          seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
+          print('Examples of parameter combinations for Seasonal ARIMA...')
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[1]))
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[2]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[3]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[4]))
+
+          min=99999999
+          p1=[-1,-1,-1]
+          p2=[-1,-1,-1,-1]
+          for param in pdq:
+               for param_seasonal in seasonal_pdq:
+                    try:
+                         mod = sm.tsa.statespace.SARIMAX(y,
+                                                       order=param,
+                                                       seasonal_order=param_seasonal,
+                                                       enforce_stationarity=False,
+                                                       enforce_invertibility=False)
+                         results = mod.fit()
+                         if results.aic<min:
+                              min=results.aic
+                              p1=param
+                              p2=param_seasonal
+                         print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
+                    except:
+                         continue
+          print(p1)
+          print(min)
+          print(p2)
+          # 12 is the interval for 12 months
+          mod = sm.tsa.statespace.SARIMAX(y,
+                                        order=(p1[0], p1[1], p1[2]),
+                                        seasonal_order=(p2[0], p2[1], p2[2], 12),
+                                        enforce_stationarity=False,
+                                        enforce_invertibility=False)
+          results = mod.fit()
+          print(results.summary().tables[1])
+          steps = int(request.POST.get('steps'))
+          
+          print("steps are",steps)
+          pred_uc = results.get_forecast(steps=steps)
+               # Create traces
+          fig = go.Figure()
+          fig.add_trace(go.Scatter(x=y.index, y=y['Production'],
+                              mode='lines',
+                              name='Actual Value'))
+          type(pred_uc.predicted_mean)
+          fig.add_trace(go.Scatter(x=pred_uc.predicted_mean.index, y=pred_uc.predicted_mean,
+                              mode='lines',
+                              name='Predicted Value'))
+          #fig.show()
+          fig.update_layout(
+          title="Rice Production of "+country,
+          xaxis_title="Year",
+          yaxis_title="Production",
+          legend_title="Country",
+          font=dict(
+               family="Courier New, monospace",
+               size=14,
+               color="RebeccaPurple"))
+          graph=fig.to_html()
+          return render(request,'arima_result.html',{'graph':graph})
+
+     
+     else:
+          return render(request,'rice_prediction.html')
+     
+
+def predict_crop_maize(request):
+     if request.method=='POST':
+          df=pd.read_csv("maize-production.csv",parse_dates=['Year'])
+          df.dtypes
+          country=request.POST.get('country')
+          
+          print(country)
+          #country='India'
+          production=df[df['Entity']==country]
+          production=production.loc[:,['Year','Maize | 00000056 || Production | 005510 || tonnes']]
+          production=production.sort_values('Year')
+          production.isnull().sum()
+          production=production.set_index('Year')
+          production.index
+          y=production
+          p = d = q = range(0, 2)
+          pdq = list(itertools.product(p, d, q))
+          seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
+          print('Examples of parameter combinations for Seasonal ARIMA...')
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[1]))
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[2]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[3]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[4]))
+
+          min=99999999
+          p1=[-1,-1,-1]
+          p2=[-1,-1,-1,-1]
+          for param in pdq:
+               for param_seasonal in seasonal_pdq:
+                    try:
+                         mod = sm.tsa.statespace.SARIMAX(y,
+                                                       order=param,
+                                                       seasonal_order=param_seasonal,
+                                                       enforce_stationarity=False,
+                                                       enforce_invertibility=False)
+                         results = mod.fit()
+                         if results.aic<min:
+                              min=results.aic
+                              p1=param
+                              p2=param_seasonal
+                         print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
+                    except:
+                         continue
+          print(p1)
+          print(min)
+          print(p2)
+          # 12 is the interval for 12 months
+          mod = sm.tsa.statespace.SARIMAX(y,
+                                        order=(p1[0], p1[1], p1[2]),
+                                        seasonal_order=(p2[0], p2[1], p2[2], 12),
+                                        enforce_stationarity=False,
+                                        enforce_invertibility=False)
+          results = mod.fit()
+          print(results.summary().tables[1])
+          steps = int(request.POST.get('steps'))
+          
+          print("steps are",steps)
+          pred_uc = results.get_forecast(steps=steps)
+               # Create traces
+          fig = go.Figure()
+          fig.add_trace(go.Scatter(x=y.index, y=y['Maize | 00000056 || Production | 005510 || tonnes'],
+                              mode='lines',
+                              name='Actual Value'))
+          type(pred_uc.predicted_mean)
+          fig.add_trace(go.Scatter(x=pred_uc.predicted_mean.index, y=pred_uc.predicted_mean,
+                              mode='lines',
+                              name='Predicted Value'))
+          #fig.show()
+          fig.update_layout(
+          title="Maize Production of "+country,
+          xaxis_title="Year",
+          yaxis_title="Production",
+          legend_title="Country",
+          font=dict(
+               family="Courier New, monospace",
+               size=14,
+               color="RebeccaPurple"))
+          graph=fig.to_html()
+          return render(request,'arima_result.html',{'graph':graph})
+
+     
+     else:
+          return render(request,'maize_prediction.html')
+     
+     
+     
+     
+def predict_population(request):
+     if request.method=='POST':
+          df=pd.read_csv("share_of_the_.population_in_agriculture.csv",parse_dates=['Year'])
+          df.dtypes
+          country=request.POST.get('country')
+          
+          print(country)
+          #country='India'
+          production=df[df['Entity']==country]
+          production=production.loc[:,['Year','share_employed_agri']]
+          production=production.sort_values('Year')
+          production.isnull().sum()
+          production=production.set_index('Year')
+          production.index
+          y=production
+          p = d = q = range(0, 2)
+          pdq = list(itertools.product(p, d, q))
+          seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
+          print('Examples of parameter combinations for Seasonal ARIMA...')
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[1]))
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[2]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[3]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[4]))
+
+          min=99999999
+          p1=[-1,-1,-1]
+          p2=[-1,-1,-1,-1]
+          for param in pdq:
+               for param_seasonal in seasonal_pdq:
+                    try:
+                         mod = sm.tsa.statespace.SARIMAX(y,
+                                                       order=param,
+                                                       seasonal_order=param_seasonal,
+                                                       enforce_stationarity=False,
+                                                       enforce_invertibility=False)
+                         results = mod.fit()
+                         if results.aic<min:
+                              min=results.aic
+                              p1=param
+                              p2=param_seasonal
+                         print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
+                    except:
+                         continue
+          print(p1)
+          print(min)
+          print(p2)
+          # 12 is the interval for 12 months
+          mod = sm.tsa.statespace.SARIMAX(y,
+                                        order=(p1[0], p1[1], p1[2]),
+                                        seasonal_order=(p2[0], p2[1], p2[2], 12),
+                                        enforce_stationarity=False,
+                                        enforce_invertibility=False)
+          results = mod.fit()
+          print(results.summary().tables[1])
+          steps = int(request.POST.get('steps'))
+          
+          print("steps are",steps)
+          pred_uc = results.get_forecast(steps=steps)
+               # Create traces
+          fig = go.Figure()
+          fig.add_trace(go.Scatter(x=y.index, y=y['share_employed_agri'],
+                              mode='lines',
+                              name='Actual Value'))
+          type(pred_uc.predicted_mean)
+          fig.add_trace(go.Scatter(x=pred_uc.predicted_mean.index, y=pred_uc.predicted_mean,
+                              mode='lines',
+                              name='Predicted Value'))
+          #fig.show()
+          fig.update_layout(
+          title="Population of "+country+" employed in Agriculture",
+          xaxis_title="Year",
+          yaxis_title="Production",
+          legend_title="Country",
+          font=dict(
+               family="Courier New, monospace",
+               size=14,
+               color="RebeccaPurple"))
+          graph=fig.to_html()
+          return render(request,'arima_result.html',{'graph':graph})
+
+     
+     else:
+          return render(request,'population_prediction.html')
+          
+     
+
+def fertilizer_detection(request):
+     if request.method=='POST':
+          df=pd.read_csv("fertilizers.csv",parse_dates=['Year'])
+          df.dtypes
+          country=request.POST.get('country')
+          
+          print(country)
+          #country='India'
+          production=df[df['Entity']==country]
+          production=production.loc[:,['Year','Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare']]
+          production=production.sort_values('Year')
+          production.isnull().sum()
+          production=production.set_index('Year')
+          production.index
+          y=production
+          p = d = q = range(0, 2)
+          pdq = list(itertools.product(p, d, q))
+          seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
+          print('Examples of parameter combinations for Seasonal ARIMA...')
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[1]))
+          print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[2]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[3]))
+          print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[4]))
+
+          min=99999999
+          p1=[-1,-1,-1]
+          p2=[-1,-1,-1,-1]
+          for param in pdq:
+               for param_seasonal in seasonal_pdq:
+                    try:
+                         mod = sm.tsa.statespace.SARIMAX(y,
+                                                       order=param,
+                                                       seasonal_order=param_seasonal,
+                                                       enforce_stationarity=False,
+                                                       enforce_invertibility=False)
+                         results = mod.fit()
+                         if results.aic<min:
+                              min=results.aic
+                              p1=param
+                              p2=param_seasonal
+                         print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
+                    except:
+                         continue
+          print(p1)
+          print(min)
+          print(p2)
+          # 12 is the interval for 12 months
+          mod = sm.tsa.statespace.SARIMAX(y,
+                                        order=(p1[0], p1[1], p1[2]),
+                                        seasonal_order=(p2[0], p2[1], p2[2], 12),
+                                        enforce_stationarity=False,
+                                        enforce_invertibility=False)
+          results = mod.fit()
+          print(results.summary().tables[1])
+          steps = int(request.POST.get('steps'))
+          
+          print("steps are",steps)
+          pred_uc = results.get_forecast(steps=steps)
+               # Create traces
+          fig = go.Figure()
+          fig.add_trace(go.Scatter(x=y.index, y=y['Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare'],
+                              mode='lines',
+                              name='Actual Value'))
+          type(pred_uc.predicted_mean)
+          fig.add_trace(go.Scatter(x=pred_uc.predicted_mean.index, y=pred_uc.predicted_mean,
+                              mode='lines',
+                              name='Predicted Value'))
+          #fig.show()
+          fig.update_layout(
+          title="Fertilizers Use of "+country,
+          xaxis_title="Year",
+          yaxis_title="Use",
+          legend_title="Country",
+          font=dict(
+               family="Courier New, monospace",
+               size=14,
+               color="RebeccaPurple"))
+          graph=fig.to_html()
+          return render(request,'arima_result.html',{'graph':graph})
+
+     
+     else:
+          return render(request,'fertilizer_prediction.html')
+     
 def disease_detection(request):
      if request.method=='POST':
     
@@ -192,20 +543,8 @@ def disease_detection(request):
           predicted_class = classes[predicted_class_index]
       
 
-          # # Make predictions
-          # predictions = model.predict(img_array)
-          # classes=['Apple_Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy', 'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy', 'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy', 'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy', 'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy', 'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy']
-
-          # # Get the predicted class
-          # predicted_class_index = np.argmax(predictions)
-          # predicted_class = classes[predicted_class_index]
-
-          # Get the exact class name
-          # class_labels = train_generator.class_indices
-          # exact_class_name = list(class_labels.keys())[predicted_class_index]
-
           print("Predicted class:", predicted_class)
-          # print("Exact class name:", exact_class_name)
+      
           
           if predicted_class == 'Apple_Apple_scab':
                o=disease_solution.objects.filter(description=predicted_class)

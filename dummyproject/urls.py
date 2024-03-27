@@ -55,7 +55,10 @@ urlpatterns = [
     path('live',views.live,name="live"),
     path('e503',views.e503,name="e503"),
     path('disease_detection',views.disease_detection,name="disease_detection"),
-    # path('detection_result',views.detection_result,name="detection_result"),
+    path('fertilizer_detection',views.fertilizer_detection,name="fertilizer_detection"),
+    path('predict_crop_rice',views.predict_crop_rice,name="predict_crop_rice"),
+    path('predict_crop_maize',views.predict_crop_maize,name="predict_crop_maize"),
+    path('predict_population',views.predict_population,name="predict_population"),
     
     
     

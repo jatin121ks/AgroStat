@@ -203,7 +203,9 @@
     <nav class="sidebar show">
       <div class="text">AgroStat.com</div>
       <ul class="main_side">
-        <li class="active"><a href="{% url 'userprofile_s' %}">Dashboard</a></li>
+        <li class="active">
+          <a href="{% url 'userprofile_s' %}">Dashboard</a>
+        </li>
 
         <li>
           <a href="#" id="1"
@@ -222,7 +224,34 @@
             <li>
               <a href="{% url 'disease_detection' %}">Crop Disease Detection</a>
             </li>
-            <li><a href="#">Price Prediction</a></li>
+            <li>
+              <a href="#" id="3"
+                >Prediction
+                <span class="fas fa-caret-down"></span>
+              </a>
+              <ul class="item-show-2">
+                <li>
+                  <a href="{% url 'fertilizer_detection' %}"
+                    >Fertilizer Use Prediction</a
+                  >
+                </li>
+                <li>
+                  <a href="{% url 'predict_crop_rice' %}"
+                    >Rice Production Prediction</a
+                  >
+                </li>
+                <li>
+                  <a href="{% url 'predict_crop_maize' %}"
+                    >Maize Production Prediction</a
+                  >
+                </li>
+                <li>
+                  <a href="{% url 'predict_population' %}"
+                    >Population Prediction</a
+                  >
+                </li>
+              </ul>
+            </li>
           </ul>
         </li>
 

@@ -35,3 +35,4 @@ admin.site.register(disease_solution)
 
 
 
+
