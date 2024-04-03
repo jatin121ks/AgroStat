@@ -59,6 +59,19 @@ urlpatterns = [
     path('predict_crop_rice',views.predict_crop_rice,name="predict_crop_rice"),
     path('predict_crop_maize',views.predict_crop_maize,name="predict_crop_maize"),
     path('predict_population',views.predict_population,name="predict_population"),
+    path('predict_crop_wheat',views.predict_crop_wheat,name="predict_crop_wheat"),
+    path('register_otp',views.register_otp,name="register_otp"),
+    path('predict_fruit',views.predict_fruit,name="predict_fruit"),
+    path('f1',views.f1,name="f1"),
+    path('f2',views.f2,name="f2"),
+    path('f3',views.f3,name="f3"),
+    path('f4',views.f4,name="f4"),
+    path('f5',views.f5,name="f5"),
+    path('f6',views.f6,name="f6"),
+    path('f7',views.f7,name="f7"),
+    path('f8',views.f8,name="f8"),
+    
+    
     
     
     

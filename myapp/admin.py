@@ -14,6 +14,7 @@ from myapp.models import contact
 from myapp.models import register
 from myapp.models import agri_crops_details
 from myapp.models import disease_solution
+from myapp.models import support
 
 # Register your models here.
 admin.site.register(person)
@@ -31,6 +32,7 @@ admin.site.register(contact)
 admin.site.register(register)
 admin.site.register(agri_crops_details)
 admin.site.register(disease_solution)
+admin.site.register(support)
 
 
 

@@ -65,8 +65,7 @@
             <div class="col-6 p-4">
               <h2 class="fw-bolder c1">Register Here</h2>
            
-              <form method="POST" action="
-              ">
+              <form method="POST" action="{% url 'register_otp'   %}">
               {% csrf_token %}
                 <div class="input-group mb-3">
                   <span
@@ -78,11 +77,11 @@
                   <input
                     type="text"
                     class="form-control border-0 border-bottom border-1 border-dark rounded-0"
-                    placeholder="Username"
+                    placeholder={{x.name}}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     name="name"
-                    required
+                    readonly value="{{name}}" 
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -95,11 +94,11 @@
                   <input
                     type="email"
                     class="form-control border-0 border-bottom border-1 border-dark rounded-0"
-                    placeholder="Your Email"
+                    placeholder={{x.email}}
                     aria-label="Email"
                     aria-describedby="basic-addon1"
                     name="email"
-                    required
+                    readonly value="{{email}}" 
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -112,12 +111,12 @@
                   <input
                     type="password"
                     class="form-control border-0 border-bottom border-1 border-dark rounded-0"
-                    placeholder="Password"
+                    placeholder={{x.password}}
                     aria-label="Password"
                     aria-describedby="basic-addon1"
                     name="password"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                    required
+                    readonly value="{{password}}" 
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -125,42 +124,22 @@
                     class="input-group-text border-0 border-bottom border-1 border-dark rounded-0"
                     style="background-color: transparent"
                     id="basic-addon1"
-                    ><i class="icofont-ui-lock"></i
+                    ><img src="static\images\security.png" style="height: 1.4em; width: 1.4em;"></img
                   ></span>
+                  <input type="hidden" name="org" value="{{otp}}">
                   <input
-                    type="password"
+                    type="text"
+
                     class="form-control border-0 border-bottom border-1 border-dark rounded-0"
-                    placeholder="Repeat your password"
+                    placeholder="Enter OTP"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
-                    name="cpass"
+                    name="otp"
                     required
                   />
                 </div>
-                <div class="input-group mb-3">
-                  <div
-                    class="input-group-text border-0 rounded-0"
-                    style="background-color: transparent"
-                  >
-                    <input
-                      class="form-check-input mt-0 border border-2 border-dark"
-                      type="checkbox"
-                      value="" required
-                      aria-label="Checkbox for following text input"
-                    required
-
-                    />
-                  </div>
-                  <label class="form-check-label ms-2"
-                    >I agree all statements in
-                    <a
-                      href="#"
-                      class="link-dark link-underline-opacity-0 link-offset-2 a1"
-                    >
-                      Terms of Service</a
-                    >
-                  </label>
-                </div>
+                
+                  
 
                 <div class="input-group mb-3 d-grid gap-2">
                   <button type="submit" class="btn btn-outline-warning text-dark-emphasis">
@@ -196,12 +175,17 @@
   {% endif %} 
   {% if msg == 2 %}
   <script type="text/javascript">
-    alert("User is registered successfuly");
+    alert("OTP is sent to your Email");
   </script>
   {% endif %} 
   {% if msg == 3 %}
   <script type="text/javascript">
     alert("Password does not match.");
+  </script>
+  {% endif %} 
+  {% if msg == 4 %}
+  <script type="text/javascript">
+    alert("OTP does not match.");
   </script>
   {% endif %} 
  

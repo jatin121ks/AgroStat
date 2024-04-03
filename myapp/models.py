@@ -94,6 +94,10 @@ class myreview(models.Model):
      title=models.CharField(max_length=50)
      message=models.TextField()
      
+class support(models.Model):
+     title=models.CharField(max_length=50)
+     content=models.TextField()
+     
 class contact(models.Model):
      name=models.CharField(max_length=50)
      email=models.EmailField()

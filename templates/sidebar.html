@@ -226,10 +226,9 @@
             </li>
             <li>
               <a href="#" id="3"
-                >Prediction
-                <span class="fas fa-caret-down"></span>
+                >Prediction <span class="fas fa-caret-down"></span>
               </a>
-              <ul class="item-show-2">
+              <ul class="item-show-3">
                 <li>
                   <a href="{% url 'fertilizer_detection' %}"
                     >Fertilizer Use Prediction</a
@@ -246,9 +245,49 @@
                   >
                 </li>
                 <li>
+                  <a href="{% url 'predict_crop_wheat' %}"
+                    >Wheat Production Prediction</a
+                  >
+                </li>
+                <li>
                   <a href="{% url 'predict_population' %}"
                     >Population Prediction</a
                   >
+                </li>
+                <li>
+                  <a href="{% url 'predict_fruit' %}">Fruit Prediction</a>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="#" id="4"
+                >Analysis <span class="fas fa-caret-down"></span>
+              </a>
+              <ul class="item-show-4">
+                <li>
+                  <a href="{% url 'f1' %}">Only country</a>
+                </li>
+                <li>
+                  <a href="{% url 'f2' %}">Only year</a>
+                </li>
+                <li>
+                  <a href="{% url 'f3' %}">Country with startyear</a>
+                </li>
+                <li>
+                  <a href="{% url 'f4' %}">2 country</a>
+                </li>
+                <li>
+                  <a href="{% url 'f5' %}">3 country</a>
+                </li>
+                <li>
+                  <a href="{% url 'f6' %}">3 country with range</a>
+                </li>
+                <li>
+                  <a href="{% url 'f7' %}">Top n Country</a>
+                </li>
+                <li>
+                  <a href="{% url 'f8' %}">World Map</a>
                 </li>
               </ul>
             </li>
