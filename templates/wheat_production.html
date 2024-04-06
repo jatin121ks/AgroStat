@@ -13,16 +13,15 @@
         <h1 class="mt-5 display-3">Wheat Production Prediction</h1>
         <br />
 
-        <div class="form-floating mb-3">
-          <input
-            type="input"
-            class="form-control"
-            id="floatingInput"
-            placeholder="Upload Image"
-            name="country"
-          />
-          <label for="floatingInput">Enter the name of the country</label>
-        </div>
+        <select name="country" class="form-select form-select-lg fs-5 mb-4">
+          <option selected class="mb-5">
+            Select a country for fertilizer prediction
+          </option>
+
+          {% for i in data %}
+          <option value="{{i}}">{{i}}</option>
+          {% endfor %}
+        </select>
         <div class="form-floating mb-3">
           <input
             type="number  "

@@ -18,8 +18,7 @@ from myapp.models import register
 from myapp.models import agri_crops_details
 from myapp.models import disease_solution
 import numpy as np
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.models import load_model
+import country_converter as cc
 import warnings
 import itertools
 import matplotlib.pyplot as plt
@@ -29,47 +28,273 @@ import pandas as pd
 import statsmodels.api as sm
 import matplotlib
 import plotly.graph_objects as go
-
+from .models import ChatMessage
+from django.http import JsonResponse
+import json
+import spacy
+import plotly.express as px
 
 
 
 
 def f1(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Entity"].drop_duplicates().tolist()
-     return render(request,"md1.html",{"data":column})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          country=request.POST.get("country")
+          #filtering the dataset
+          df1=df[df["Entity"]==country]
+          fig=px.line(df1,x="Year",y="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"
+          #labels={"Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare":"Nitrogen kilograms per hectar"},
+          )
+          fig.update_layout(xaxis_title="Year", yaxis_title="Nitrogen used kg/ha", title="Nutrient Nitrogen(N) Used Kilogram per Hectare", xaxis_type="category",plot_bgcolor= "white",
+          width=1000,
+          paper_bgcolor="#f0ad4e",title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=False, showline=True, linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"),)
+          fig.update_traces(
+               hovertemplate="%{y} kg/ha<br>Year: %{x}", 
+               line_color="black"
+          )
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+          
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,"md1.html",{"data":column})
 def f2(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Year"].drop_duplicates().tolist()
-     return render(request,"md2.html",{"data":column})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          year=int(request.POST.get("year"))
+          print(year)
+          #filtering the dataset
+          df1=df[df["Year"]==year]
+          print(df1)
+          
+          fig=px.bar(df1,y="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",x="Entity"
+          #labels={"Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare":"Nitrogen kilograms per hectar"},
+          )
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare in {year}", xaxis_type="category",plot_bgcolor= "white",
+          height=800,
+          width=1000,
+          paper_bgcolor="#f0ad4e",title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=False, showline=True, linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))
+          fig.update_traces(
+               hovertemplate="%{y} kg/ha<br>Country: %{x}",marker_color="black"
+          )
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+          
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Year"].drop_duplicates().tolist()
+          return render(request,"md2.html",{"data":column})
 def f3(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Entity"].drop_duplicates().tolist()
-     column1=data["Year"].drop_duplicates().tolist()
-     return render(request,"md3.html",{"data":column,"year":column1})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          country=request.POST.get("country")
+          print(country)
+          startyear=int(request.POST.get("startyear"))
+          print(startyear)
+          endyear=int(request.POST.get("endyear"))
+          print(endyear)
+         
+          #filtering the dataset
+          df1=df[df['Entity'] == country]
+          print(df1)
+          
+          df1=df1[(df1["Year"]>=startyear) & (df1["Year"]<=endyear)]
+          
+          print(df1)
+          
+          fig=px.scatter(df1,y="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",x="Year",size="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",size_max=60,color="Year"
+          )
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare from {startyear} to {endyear}", xaxis_type="category",plot_bgcolor= "white",
+          height=600,
+          width=1000,
+          paper_bgcolor="#f0ad4e",title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=False, showline=True, linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))
+         
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+          
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          column1=data["Year"].drop_duplicates().tolist()
+          return render(request,"md3.html",{"data":column,"year":column1})
 def f4(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Entity"].drop_duplicates().tolist()
-     return render(request,"md4.html",{"data":column})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          country1=request.POST.get("country1")
+          country2=request.POST.get("country2")
+          df1=df[df['Entity']==country1]
+          df2=df[df['Entity']==country2]
+         
+          
+          fig = go.Figure()
+          fig.add_traces(go.Scatter(x=df1["Year"],y=df1["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country1,
+                                   line=dict(color="#001f3f",width=3),
+                                   ))
+          fig.add_traces(go.Scatter(x=df2["Year"],y=df2["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country2,
+                                   line=dict(color="#0041a4",width=3),
+                                   ))
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare of {country1} and {country2}", xaxis_type="category",plot_bgcolor= "lightsteelblue",
+          height=600,
+          width=1000,
+          #paper_bgcolor="#f8b28b",
+          title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=True, showline=True,gridcolor="Lightgray", linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))    
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+     
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,"md4.html",{"data":column})
 def f5(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Entity"].drop_duplicates().tolist()
-     return render(request,"md5.html",{"data":column})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          country1=request.POST.get("country1")
+          country2=request.POST.get("country2")
+          country3=request.POST.get("country3")
+          df1=df[df['Entity']==country1]
+          df2=df[df['Entity']==country2]
+          df3=df[df['Entity']==country3]
+         
+          
+          fig = go.Figure()
+          fig.add_traces(go.Scatter(x=df1["Year"],y=df1["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines",name=country1,
+                                   line=dict(color="#001f3f",width=3),
+                                   ))
+          fig.add_traces(go.Scatter(x=df2["Year"],y=df2["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country2,
+                                   line=dict(color="#0041a4",width=3),marker=dict(symbol="square")
+                                   ))
+          fig.add_traces(go.Scatter(x=df3["Year"],y=df3["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country3,
+                                   line=dict(color="#f8b28b",width=3),marker=dict(symbol="circle")
+                                   ))
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare of {country1} and {country2}", xaxis_type="category",plot_bgcolor= "lightsteelblue",
+          height=600,
+          width=1000,
+          #paper_bgcolor="#f8b28b",
+          title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=True, showline=True,gridcolor="Lightgray", linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))    
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+     
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,"md5.html",{"data":column})
 def f6(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Entity"].drop_duplicates().tolist()
-     column1=data["Year"].drop_duplicates().tolist()
-     return render(request,"md6.html",{"data":column,"year":column1})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          country1=request.POST.get("country1")
+          country2=request.POST.get("country2")
+          country3=request.POST.get("country3")
+          startyear=int(request.POST.get("startyear"))
+          endyear=int(request.POST.get("endyear"))
+          df1=df[df['Entity']==country1]
+          df1=df1[(df1["Year"]>=startyear) & (df1["Year"]<=endyear)]
+          df2=df[df['Entity']==country2]
+          df2=df2[(df2["Year"]>=startyear) & (df2["Year"]<=endyear)]
+          df3=df[df['Entity']==country3]
+          df3=df3[(df3["Year"]>=startyear) & (df3["Year"]<=endyear)]
+         
+          
+          fig = go.Figure()
+          fig.add_traces(go.Scatter(x=df1["Year"],y=df1["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines",name=country1,
+                                   line=dict(color="#001f3f",width=4),
+                                   ))
+          fig.add_traces(go.Scatter(x=df2["Year"],y=df2["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country2,
+                                   line=dict(color="#0041a4",width=4),marker=dict(symbol="square")
+                                   ))
+          fig.add_traces(go.Scatter(x=df3["Year"],y=df3["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],mode="lines+markers",name=country3,
+                                   line=dict(color="#698b90",width=4),marker=dict(symbol="circle")
+                                   ))
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare of {country1} and {country2}", xaxis_type="category",plot_bgcolor= "lightsteelblue",
+          height=600,
+          width=1000,
+          #paper_bgcolor="#f8b28b",
+          title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=True, showline=True,gridcolor="Lightgray", linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))    
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+     
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          column1=data["Year"].drop_duplicates().tolist()
+          return render(request,"md6.html",{"data":column,"year":column1})
 def f7(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Year"].drop_duplicates().tolist()
-     return render(request,"md7.html",{"data":column})
+     if request.method=="POST":
+          df=pd.read_csv("fertilizers.csv")
+          year=int(request.POST.get("year"))
+          df1=df[df['Year']==year]
+          df1=df1.dropna()
+          df1=df1.sort_values(by="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",ascending=False)
+          n=int(request.POST.get("n"))
+          dfmax=df1.head(n)
+          
+          fig = go.Figure()
+          fig.add_trace(go.Bar(x=dfmax["Entity"],y=dfmax["Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare"],marker_color="Plum"
+                                   ))
+          fig.update_layout(xaxis_title="Country", yaxis_title="Nitrogen used kg/ha", title=f"Nutrient Nitrogen(N) Used Kilogram per Hectare of top {n} countries in {year}", xaxis_type="category",plot_bgcolor= "lightsteelblue",
+          height=600,
+          width=1000,
+          #paper_bgcolor="#f8b28b",
+          title_font_size=25,
+          font=dict(family="Verdana",size=18,color="black"), title_x=0.5,
+          xaxis_title_font_size=25,yaxis_title_font_size=25, xaxis = dict(showgrid=True, showline=True,gridcolor="Lightgray", linecolor="black"),
+          yaxis=dict(showgrid=True, gridcolor="Lightgray", showline=True, linecolor="black"))    
+          graph=fig.to_html
+          return render(request,"f1result.html",{"graph":graph})
+     
+     else:
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          column1=data["Year"].drop_duplicates().tolist()
+          return render(request,"md7.html",{"data":column,"year":column1})
+
+
 def f8(request):
-     data=pd.read_csv("fertilizers.csv")
-     column=data["Year"].drop_duplicates().tolist()
-     return render(request,"md8.html",{"data":column})
+     df=pd.read_csv("fertilizers.csv")
+     df.dropna()
+     c=cc.CountryConverter()
+     df["Entity_codes"]=c.convert(names=df["Code"],to="ISO3")
+     fig = px.scatter_geo(df, locations="Entity_codes", color="Entity",
+                     hover_name="Entity", size="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",size_max=50,
+                     animation_frame="Year",
+                     projection="natural earth")
+     graph=fig.to_html
+     return render(request,"f1result.html",{"graph":graph})
 
+def f9(request):
+     df1=pd.read_csv("fertilizers.csv")
+     df1.dropna()
+     c=cc.CountryConverter()
+     df1["Entity_codes"]=c.convert(names=df1["Code"],to="ISO3")
 
+     fig = px.choropleth(df1, locations="Entity_codes", color="Nutrient nitrogen N (total) | 00003102 || Use per area of cropland | 005159 || kilograms per hectare",
+                     hover_name="Entity",
+                     animation_frame="Year",
+                     projection="natural earth")
+     graph=fig.to_html
+     return render(request,"f1result.html",{"graph":graph})
+
+def fertilizer_link(request):
+     return render(request,'fertilizers_link.html')
 
 # Create your views here.
 def footer(request):
@@ -356,7 +581,9 @@ def predict_crop_rice(request):
 
      
      else:
-          return render(request,'rice_prediction.html')
+          data=pd.read_csv("rice-production.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,'rice_prediction.html',{"data":column})
      
 
 def predict_crop_maize(request):
@@ -441,7 +668,9 @@ def predict_crop_maize(request):
 
      
      else:
-          return render(request,'maize_prediction.html')
+          data=pd.read_csv("maize-production.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,'maize_prediction.html',{"data":column})
      
 
 def predict_fruit(request):
@@ -628,7 +857,9 @@ def predict_population(request):
 
      
      else:
-          return render(request,'population_prediction.html')
+          data=pd.read_csv("share_of_the_.population_in_agriculture.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,'population_prediction.html',{"data":column})
           
 def predict_crop_wheat(request):
      if request.method=='POST':
@@ -713,7 +944,9 @@ def predict_crop_wheat(request):
 
      
      else:
-          return render(request,'wheat_production.html')
+          data=pd.read_csv("wheat-production.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,'wheat_production.html',{"data":column})
      
 
 def fertilizer_detection(request):
@@ -798,9 +1031,13 @@ def fertilizer_detection(request):
 
      
      else:
-          return render(request,'fertilizer_prediction.html')
+          data=pd.read_csv("fertilizers.csv")
+          column=data["Entity"].drop_duplicates().tolist()
+          return render(request,'fertilizer_prediction.html',{"data":column})
      
 def disease_detection(request):
+     from tensorflow.keras.preprocessing import image
+     from tensorflow.keras.models import load_model
      if request.method=='POST':
     
 
@@ -997,6 +1234,164 @@ def live(request):
      k=json_data['articles']
      return render (request,'live_news.html',{'k':k})
      
+
+def dashboard(request):
+     return render(request,'dashboard.html')
+
+nlp = spacy.load('en_core_web_md')
+def sentence_similarity(sentence1, sentence2):
+    # Process the sentences using spaCy
+    #nlp = spacy.load('en_core_web_md')
+
+    doc1 = nlp(sentence1)
+    doc2 = nlp(sentence2)
+   
+    # Compute the similarity between the two sentences
+    similarity_score = doc1.similarity(doc2)
+   
+    return similarity_score
+def get_bot_response1(user_message):
+     import google.generativeai as genai
+     genai.configure(api_key="AIzaSyCRQbHHFaxgY0OgqXX_6t8OTZyk_8TGO6I")
+     # Set up the model
+     generation_config = {
+     "temperature": 0.9,
+     "top_p": 1,
+     "top_k": 1,
+     "max_output_tokens": 2048,
+     }
+
+     safety_settings = [
+     {
+     "category": "HARM_CATEGORY_HARASSMENT",
+     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+     },
+     {
+     "category": "HARM_CATEGORY_HATE_SPEECH",
+     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+     },
+     {
+     "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+     },
+     {
+     "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+     },
+     ]
+
+     model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+                              generation_config=generation_config,
+                              safety_settings=safety_settings)
+     
+     # user_prompt = "\nUser
+
+     convo = model.start_chat()
+     convo.send_message(user_message)
+     answer=convo.last.text
+     return answer
+
+    # If no matching question is found, use a default response
+    # return "I'm sorry, I don't understand that question."
+def chat(request):
+     if request.method == 'POST':
+        # Parse the JSON content from the request body
+        data = json.loads(request.body.decode('utf-8'))
+       
+        # Access the 'user_input' key from the JSON data
+        user_message = data.get('message', '')
+       
+        # Now you can use user_message in your logic
+        print("User Message:", user_message)
+       
+        #Get bot response based on user input
+        bot_response = get_bot_response1(user_message)
+
+        # Save user message to the database
+        ChatMessage.objects.create(user='User', message=user_message)
+        # Save bot response to the database
+        ChatMessage.objects.create(user='Bot', message=bot_response)
+        #bot_response=""
+        return JsonResponse({'response': bot_response})
+   
+     messages = ChatMessage.objects.all()
+     return render(request, 'chat.html', {'messages': messages})
+
+
+
+def chat1(request):
+     if request.method == 'POST':
+          import google.generativeai as genai
+
+          genai.configure(api_key="AIzaSyCRQbHHFaxgY0OgqXX_6t8OTZyk_8TGO6I")
+
+          # Set up the model
+          generation_config = {
+          "temperature": 0.9,
+          "top_p": 1,
+          "top_k": 1,
+          "max_output_tokens": 2048,
+          }
+
+          safety_settings = [
+          {
+          "category": "HARM_CATEGORY_HARASSMENT",
+          "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+          "category": "HARM_CATEGORY_HATE_SPEECH",
+          "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+          "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+          "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+          "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          ]
+
+          model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+                                        generation_config=generation_config,
+                                        safety_settings=safety_settings)
+
+          convo = model.start_chat(history=[
+          {
+          "role": "user",
+          "parts": ["hi"]
+          },
+          {
+          "role": "model",
+          "parts": ["Hello! 👋 How can I help you today?"]
+          },
+          {
+          "role": "user",
+          "parts": ["hi"]
+          },
+          {
+          "role": "model",
+          "parts": ["Hey there! 👋 Is there anything I can assist you with today?"]
+          },
+          {
+          "role": "user",
+          "parts": ["yes"]
+          },
+          {
+          "role": "model",
+          "parts": ["Great! 😊 How can I help you?"]
+          },
+          ])
+          msg=request.POST.get("msg")
+          x=msg
+          convo.send_message(x)
+          print(convo.last.text)
+          return render(request, 'chat1.html',{"result":convo.last.text})
+
+     else:
+          return render(request, 'chat1.html')
+     
+
 
 # add def fuction to the urls
 #copy from admin.py the import lines

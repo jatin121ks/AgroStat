@@ -1,23 +1,5 @@
 {% extends 'base.html' %} {% block content %} {%load static%}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{%static 'icofont/icofont.min.css'%}"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{%static 'css/bootstrap.min.css'%}"
-    />
-    <style></style>
-  </head>
-  <body>
+
     <section class="hero" style="margin-top: -200px">
       <div id="carouselExampleIndicators" class="carousel slide">
         <div class="carousel-indicators">
@@ -25,7 +7,7 @@
             type="button"
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide-to="0"
-            class="active ms-3"
+            class="active ms-0"
             aria-current="true"
             aria-label="Slide 1"
             style="
@@ -41,7 +23,7 @@
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide-to="1"
             aria-label="Slide 2"
-            class="ms-3"
+            class="ms-0"
             style="
               height: 15px;
               width: 15px;
@@ -55,7 +37,7 @@
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide-to="2"
             aria-label="Slide 3"
-            class="ms-3"
+            class="ms-0"
             style="
               height: 15px;
               width: 15px;
@@ -73,7 +55,7 @@
             <img
               src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/img_1.jpg"
               class="d-block w-100"
-              style="height: 100vh; filter: brightness(70%)"
+              style="height: 110vh; filter: brightness(70%)"
               alt="..."
             />
             <div class="carousel-caption d-none d-lg-block">
@@ -99,7 +81,7 @@
             <img
               src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/img_2.jpg"
               class="d-block w-100"
-              style="height: 100vh; filter: brightness(70%)"
+              style="height: 110vh; filter: brightness(70%)"
               alt="..."
             />
             <div class="carousel-caption d-none d-lg-block">
@@ -125,7 +107,7 @@
             <img
               src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/img_3.jpg"
               class="d-block w-100"
-              style="height: 100vh; filter: brightness(70%)"
+              style="height: 110vh; filter: brightness(70%)"
               alt="..."
             />
             <div class="carousel-caption d-none d-lg-block">
@@ -167,9 +149,171 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-    </section>
+      </section>
 
-    <section class="" name="About us">
+      <section class="" name="About us">
+        <div
+          class="text-center w-100 row"
+          style="margin-top: 100px; margin-bottom: 50px"
+        >
+          <h1 class="mb-5 c1"><strong>About</strong> <small>Us</small></h1>
+  
+          <div class="col-md-8 mx-auto mb-3">
+            <h3 class="mb-5 c1"><strong>Our</strong> <small>Story</small></h3>
+            <p style="color: black">
+              As BTech ECE students, we Tejbir Singh and Jatin Sharma were
+              passionate about technology and its potential to make a real
+              difference. During our final semester project, we saw a disconnect:
+              limited information and outdated practices hindering the
+              agricultural sector. This sparked AgroStat - a platform to empower
+              farmers with knowledge and tools for success. Born from a final
+              project, AgroStat has become a labor of love. We pour our time and
+              expertise into researching, writing content, and developing
+              functionalities. Every piece of information and every line of code
+              reflects our dedication to creating a valuable resource for the
+              agricultural community.
+            </p>
+          </div>
+        </div>
+        <div class="row text-center mb-5 w-100">
+          <h3 class="mb-5 c1 "><strong>Our</strong> <small>Values</small></h3>
+  
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="static\images\knowledge.png"
+                alt="1.jpg"
+                style="height: 70px; width: 70px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Knowledge Democracy</h1>
+          </div>
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="static\images\innovation.png"
+                alt="2.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Innovation Focus</h1>
+          </div>
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/2.png"
+                alt="3.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Sustainable Future</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/6.png"
+                alt="4.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Farmer Empowerment</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="static\images\community.png"
+                alt="5.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Community Collaboration</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="static\images\data.png"
+                alt="6.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Data-Driven Decisions</h1>
+          </div>
+        </div>
+  
+         <div
+          class="text-center w-100 row"
+          style="margin-top: 50px; margin-bottom: 100px"
+        >
+          <div class="col-md-8 mx-auto mb-3">
+            <h3 class="mb-5 c1">
+              <strong>Join the AgroStat </strong> <small>Community</small>
+            </h3>
+            <p style="color: black">
+              We invite you to explore our website and become part of a growing
+              community of farmers, students, and agricultural professionals. We
+              believe in the power of collaboration and knowledge sharing to drive
+              positive change in the agricultural sector.
+            </p>
+          </div>
+        </div> 
+  
+         <div class="row text-center w-100">
+          <h1 class="mb-5 c1">
+            <strong>Why Choose</strong> <small>AgroStat?</small>
+          </h1>
+  
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="static\images\Comprehensive Content Library.png"
+                alt="1.jpg"
+                style="height: 70px; width: 70px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Comprehensive Content Library</h1>
+          </div>
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="static\images\Expert-Curated Information.png"
+                alt="2.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Expert-Curated Information</h1>
+          </div>
+          <div class="col-4 p-0 mt-0 mb-5">
+            <i
+              ><img
+                src="static\images\User-Friendly Platform.png"
+                alt="3.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">User-Friendly Platform</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="static\images\Future-Oriented Approach.jpg"
+                alt="4.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Future-Oriented Approach</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="static\images\Evolving Knowledge Base.png"
+                alt="5.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Evolving Knowledge Base</h1>
+          </div>
+          <div class="col-4 p-0 mt-3 mb-5">
+            <i
+              ><img
+                src="static\images\Engaging Community.png"
+                alt="6.jpg"
+                style="height: 62px; width: 62px"
+            /></i>
+            <h1 class="fs-4 pt-3 c1">Engaging Community</h1>
+          </div>
+        </div> 
+      </section>
+
+    <!-- <section class="" name="About us">
       <div
         class="text-center w-100 row"
         style="margin-top: 100px; margin-bottom: 50px"
@@ -194,7 +338,7 @@
         </div>
       </div>
       <div class="row text-center mb-5">
-        <h3 class="mb-5 c1"><strong>Our</strong> <small>Values</small></h3>
+        <h3 class="mb-5 c1 "><strong>Our</strong> <small>Values</small></h3>
 
         <div class="col-4 p-0 mt-0 mb-5">
           <i
@@ -329,7 +473,7 @@
           <h1 class="fs-4 pt-3 c1">Engaging Community</h1>
         </div>
       </div>
-    </section>
+    </section> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

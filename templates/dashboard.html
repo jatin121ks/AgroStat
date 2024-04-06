@@ -1,0 +1,165 @@
+{% extends 'sidebar.html' %} {% block content %} {% load static %}
+<html>
+  <head>
+    <title></title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{%static 'icofont/icofont.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{%static 'css/bootstrap.min.css' %}"
+    />
+    <style>
+      #chatbot-container {
+        display: none; /* Ensures chatbot starts hidden */
+        position: fixed;
+        bottom: 30px;
+        right: 90px;
+        width: 300px;
+        height: 400px;
+        background-color: #a8a8a8;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      #chat-container {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        max-height: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      #chat-form {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #f7f7f7;
+        border-top: 1px solid #ccc;
+      }
+
+      #user-input {
+        width: 80%;
+        padding: 5px 10px;
+        border-radius: 15px;
+        border: 1px solid #ccc;
+      }
+
+      #chat-form button {
+        width: 25%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 5px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+
+      .message {
+        padding: 10px;
+        border-radius: 15px;
+        color: #ffffff;
+        max-width: 80%;
+        word-wrap: break-word;
+      }
+
+      .user-message {
+        align-self: flex-end;
+        background-color: #007bff;
+      }
+
+      .bot-message {
+        align-self: flex-start;
+        background-color: #333333;
+      }
+    </style>
+  </head>
+  <body>
+    <button
+      id="chatbot-toggle-button"
+      style="position: fixed; bottom: 20px; right: 20px; border-radius: 50%"
+    >
+      <img
+        src="static\images\robot-assistant.png"
+        style="height: 60px; width: 60px"
+        class="rounded-circle"
+      />
+    </button>
+
+    <div id="chatbot-container" style="display: none">
+      <div id="chat-container">
+        <!-- Chat messages will be added here -->
+      </div>
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type a message..." />
+        <button type="submit" style="">Send</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatbotToggle = document.getElementById("chatbot-toggle-button");
+        const chatbotContainer = document.getElementById("chatbot-container");
+        chatbotToggle.addEventListener("click", function () {
+          chatbotContainer.style.display =
+            chatbotContainer.style.display === "none" ? "block" : "none";
+        });
+
+        const chatForm = document.getElementById("chat-form");
+        chatForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const userInputField = document.getElementById("user-input");
+          const userInput = userInputField.value.trim();
+          if (!userInput) return;
+
+          addMessage(userInput, "user-message");
+          userInputField.value = "";
+
+          fetch("/chat/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCsrfToken(),
+            },
+            body: JSON.stringify({ message: userInput }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              addMessage(data.response, "bot-message");
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        function addMessage(text, className) {
+          const container = document.getElementById("chat-container");
+          const messageDiv = document.createElement("div");
+          messageDiv.textContent = text;
+          messageDiv.className = `message ${className}`;
+          container.appendChild(messageDiv);
+
+          // Scroll to the bottom every time a new message is added
+          container.scrollTop = container.scrollHeight;
+        }
+
+        function getCsrfToken() {
+          const cookies = document.cookie.split(";");
+          for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split("=");
+            if (name === "csrftoken") return value;
+          }
+          return "";
+        }
+      });
+    </script>
+
+    {% endblock %}
+  </body>
+</html>

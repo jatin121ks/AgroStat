@@ -25,108 +25,106 @@
     </style>
   </head>
   <body>
-    <nav class="navbar row navbar-expand-lg " style="background: transparent; z-index:9999 ;">
-     
-
-      <div class="col-4 fs-1">
-        <a class="navbar-brand ms-3 pb-3" href="{% url 'index' %}">
-          <img
-            src="https://ninetheme.com/themes/agro/wp-content/uploads/2019/02/site_logo.png"
-            alt="Logo"
-            width="auto"
-            height="auto"
-            class="d-inline-block align-text-top p-2 ms-5 "
-          />
-         <!-- <span class="mt-5 p-2  h3 text-warning"><strong>AgroCult</strong></span> -->
-        </a>
-      </div>
-      <div class="col-8 collapse navbar-collapse ms-5 ps-5 "  >
-        <ul class="navbar-nav ms-5 ">
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'index' %}"
-         
-              ><strong><span class="a1">Hom</span>e</strong></a
-            >
-           
-          </li>
-          
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'Agri_crops' %}"
-         
-              ><strong><span class="a1">Crop</span>s</strong></a
-            >
-           
-          </li>
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'Agri_farmer_scheme' %}"
-         
-              ><strong><span class="a1">Scheme</span>s</strong></a
-            >
-           
-          </li>
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'Agri_uni' %}"
-         
-              ><strong><span class="a1">Universit</span>y</strong></a
-            >
-           
-          </li>
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'Agri_videos' %}"
-         
-              ><strong><span class="a1">Video</span>s</strong></a
-            >
-           
-          </li>
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'Agri_latest_technology' %}"
-         
-              ><strong><span class="a1">Technologie</span>s</strong></a
-            >
-           
-          </li>
-          <li class="nav-item dropdown  fs-6" >
-            <a
-              class="nav-link  link-dark "
-              role="button"
-              href="{% url 'contactus' %}"
-         
-              ><strong><span class="a1">Contact U</span>s</strong></a
-            >
-           
-          </li>
-          
-        </ul>
-        <a href="{% url 'login' %}" class="link-warning ms-3  a1"><i class="icofont-user icofont-2x"></i></a>
-        <a href="{% url 'live' %}" class="link-warning ms-3  a1"><i class="icofont-newspaper icofont-2x"></i></a>
+    <nav
+      class="navbar navbar-expand-lg rounded"
+      style="background: transparent; z-index: 9999"
+    >
+      <div class="container-fluid">
         <button
-          class="btn btn-outline-warning text-dark border-0 border-bottom border-3 border-warning rounded-0  ms-3 fs-6" id="clickMe"
-          type="button"  onclick="window.location.href = '{% url 'e503'%}'"
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarsExample11"
+          aria-controls="navbarsExample11"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <strong>Subscribe</strong>
+          <span class="navbar-toggler-icon"></span>
         </button>
+
+        <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
+          <a class="navbar-brand col-lg-3 me-0" href="#"
+            ><img src="{% static 'images\Agrostat Logo.png' %}"  style="width: 200px"
+          /></a>
+          <ul class="navbar-nav ms-auto col-lg-7 justify-content-lg-end">
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'index' %}"
+                ><strong><span class="a1">Hom</span>e</strong></a
+              >
+            </li>
+
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'Agri_crops' %}"
+                ><strong><span class="a1">Crop</span>s</strong></a
+              >
+            </li>
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'Agri_farmer_scheme' %}"
+                ><strong><span class="a1">Scheme</span>s</strong></a
+              >
+            </li>
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'Agri_uni' %}"
+                ><strong><span class="a1">Universit</span>y</strong></a
+              >
+            </li>
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'Agri_videos' %}"
+                ><strong><span class="a1">Video</span>s</strong></a
+              >
+            </li>
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'Agri_latest_technology' %}"
+                ><strong><span class="a1">Technologie</span>s</strong></a
+              >
+            </li>
+            <li class="nav-item dropdown fs-6">
+              <a
+                class="nav-link link-dark"
+                role="button"
+                href="{% url 'contactus' %}"
+                ><strong><span class="a1">Contact U</span>s</strong></a
+              >
+            </li>
+          </ul>
+
+          <div class="d-lg-flex col-lg-2 justify-content-lg-end">
+            <a href="{% url 'login' %}" class="link-warning ms-3 a1"
+              ><i class="icofont-user icofont-2x"></i
+            ></a>
+            <a href="{% url 'live' %}" class="link-warning ms-3 a1"
+              ><i class="icofont-newspaper icofont-2x"></i
+            ></a>
+            <button
+              class="btn btn-outline-warning text-dark border-0 border-bottom border-3 border-warning rounded-0 ms-3 fs-6"
+              id="clickMe"
+              type="button"
+              onclick="window.location.href = '{% url 'e503'%}'"
+            >
+              <strong>Subscribe</strong>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</nav>
+    </nav>
 {% block content %}
 
 {% endblock %}

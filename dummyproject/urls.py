@@ -70,6 +70,13 @@ urlpatterns = [
     path('f6',views.f6,name="f6"),
     path('f7',views.f7,name="f7"),
     path('f8',views.f8,name="f8"),
+    path('f9',views.f9,name="f9"),
+    path('dashboard',views.dashboard,name="dashboard"),
+    path('chat/',views.chat,name="chat"),
+    path('chat1/',views.chat1,name="chat1"),
+    path('fertilizer_link/',views.fertilizer_link,name="fertilizer_link"),
+    
+    
     
     
     

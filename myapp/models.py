@@ -112,6 +112,11 @@ class register(models.Model):
      gender=models.CharField(max_length=1,blank=True, null=True)
      age=models.CharField(max_length=15,blank=True, null=True)
      
+class ChatMessage(models.Model):
+     user = models.CharField(max_length=100)
+     message = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+     
 #model name and view page name should not be same
 # whenever make a change in the models always need to run
 #also register the model to the admin.py
