@@ -31,7 +31,6 @@ import plotly.graph_objects as go
 from .models import ChatMessage
 from django.http import JsonResponse
 import json
-import spacy
 import plotly.express as px
 
 
@@ -1238,7 +1237,7 @@ def live(request):
 def dashboard(request):
      return render(request,'dashboard.html')
 
-nlp = spacy.load('en_core_web_md')
+
 def sentence_similarity(sentence1, sentence2):
     # Process the sentences using spaCy
     #nlp = spacy.load('en_core_web_md')

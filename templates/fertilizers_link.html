@@ -1,53 +1,75 @@
 {% extends 'sidebar.html' %} {% block content %} {%load static%}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <section class="container" style="padding-right: 30%">
-      <!-- <form method="POST" action="" class=""> -->
-      {% csrf_token %}
+<style>
+  .t {
+    color: black;
+  }
+  .t:hover {
+    color: #f0ad4e !important;
+  }
 
-      <h1 class="mt-5 display-3">Nitrogen Fertilizer Analysis</h1>
-      <div class="row align-items-center mt-3">
-        <div class="col-12">
-          <a href="{% url 'f1' %}" class="link-dark fs-3">
-            Fertilizer Use of 1 country </a
-          ><br />
-          <a href="{% url 'f2' %}" class="link-dark fs-3">
-            Fertilizer Use in 1 year </a
-          ><br />
-          <a href="{% url 'f3' %}" class="link-dark fs-3">
-            Fertilizer Use of 1 country from a startyear</a
-          ><br />
-          <a href="{% url 'f4' %}" class="link-dark fs-3">
-            Fertilizer Use of 2 country comparison
-          </a>
-        </div>
-      </div>
-      <!-- </form> -->
-    </section>
+  .d1 {
+    font-size: xx-large;
+    text-decoration: none;
+  }
+</style>
+<section class="container" style="padding-right: 20%">
+  <!-- <form method="POST" action="" class=""> -->
+  {% csrf_token %}
 
-    {% if msg == 1 %}
-    <script type="text/javascript">
-      alert("success");
-    </script>
-    {% endif %}
-    <script>
-      !(function (d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (!d.getElementById(id)) {
-          js = d.createElement(s);
-          js.id = id;
-          js.src = "https://weatherwidget.io/js/widget.min.js";
-          fjs.parentNode.insertBefore(js, fjs);
-        }
-      })(document, "script", "weatherwidget-io-js");
-    </script>
-  </body>
-</html>
+  <h1 class="mt-5 mb-5 display-3">Nitrogen Fertilizer Analysis</h1>
+  <div class="row align-items-center mt-3">
+    <div class="col-12 border border-3 border-black">
+      <a href="{% url 'f1' %}" class="d1 t">
+        Fertilizer Use Analysis of one Country </a
+      ><br />
+
+      <a href="{% url 'f2' %}" class="d1 t">
+        Fertilizer Use Analysis in one Year </a
+      ><br />
+      <a href="{% url 'f3' %}" class="d1 t">
+        Fertilizer Use Analysis of one Country in a range of years</a
+      ><br />
+      <a href="{% url 'f4' %}" class="d1 t">
+        Fertilizer Use Analysis comparison of two Countries
+      </a>
+      <br />
+      <a href="{% url 'f5' %}" class="d1 t">
+        Fertilizer Use Analysis comparison of three Countries
+      </a>
+      <br />
+      <a href="{% url 'f6' %}" class="d1 t">
+        Fertilizer Use Analysis comparison of three Countries in a range of
+        years
+      </a>
+      <br />
+      <a href="{% url 'f7' %}" class="d1 t">
+        Fertilizer Use Analysis of top N countries in a year
+      </a>
+      <br />
+      <a href="{% url 'f8' %}" class="d1 t">
+        Fertilizer Use Analysis World Map
+      </a>
+    </div>
+  </div>
+  <!-- </form> -->
+</section>
+
+{% if msg == 1 %}
+<script type="text/javascript">
+  alert("success");
+</script>
+{% endif %}
+<script>
+  !(function (d, s, id) {
+    var js,
+      fjs = d.getElementsByTagName(s)[0];
+    if (!d.getElementById(id)) {
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://weatherwidget.io/js/widget.min.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }
+  })(document, "script", "weatherwidget-io-js");
+</script>
+
 {% endblock %}
